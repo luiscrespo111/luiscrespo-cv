@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Luis Fernando Crespo — Curriculum Vitae</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-light: #243260;
+    --gold: #b8860b;
+    --gold-light: #d4a017;
+    --cream: #faf8f4;
+    --text: #2c2c2a;
+    --text-muted: #6b6b6b;
+    --border: #e0dbd0;
+    --white: #ffffff;
+    --section-bg: #f5f2ec;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 3.5rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  }
+  .header-inner { max-width: 860px; margin: 0 auto; }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: white;
+    margin-bottom: 0.4rem;
+  }
+  header .subtitle {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.72);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.8rem;
+  }
+  .contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.2rem 2.5rem;
+    font-size: 0.88rem;
+    color: rgba(255,255,255,0.82);
+  }
+  .contact-row a { color: rgba(255,255,255,0.9); text-decoration: none; }
+  .contact-row a:hover { color: var(--gold-light); }
+  .contact-item { display: flex; align-items: center; gap: 0.4rem; }
+
+  /* NAV */
+  nav {
+    background: var(--navy-light);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  nav ul {
+    display: flex;
+    list-style: none;
+    max-width: 860px;
+    margin: 0 auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav ul::-webkit-scrollbar { display: none; }
+  nav a {
+    display: block;
+    padding: 0.9rem 1.1rem;
+    color: rgba(255,255,255,0.72);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: color 0.2s, border-bottom 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover, nav a.active {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold-light);
+  }
+
+  /* MAIN */
+  main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+  /* SECTIONS */
+  section { margin-bottom: 3rem; scroll-margin-top: 60px; }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--navy);
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .section-title svg { opacity: 0.7; flex-shrink: 0; }
+
+  /* PROFILE */
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .info-item {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+  }
+  .info-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.2rem;
+  }
+  .info-value { font-weight: 500; color: var(--text); font-size: 0.93rem; }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--gold);
+  }
+  .card:last-child { margin-bottom: 0; }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--navy);
+    margin-bottom: 0.25rem;
+  }
+  .card-meta {
+    font-size: 0.82rem;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+  }
+  .card-body {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    font-size: 0.72rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 3px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin-right: 0.3rem;
+  }
+  .badge-gold {
+    background: var(--gold);
+  }
+
+  /* POSITIONS TABLE */
+  .pos-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .pos-header {
+    background: var(--section-bg);
+    padding: 0.7rem 1.2rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .pos-row {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.6rem 1.2rem;
+    align-items: start;
+  }
+  .pos-row:last-child { border-bottom: none; }
+  .pos-year {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gold);
+    white-space: nowrap;
+    padding-top: 0.1rem;
+  }
+  .pos-title { font-weight: 500; font-size: 0.93rem; color: var(--navy); }
+  .pos-detail { font-size: 0.83rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+  /* PUBLICATIONS */
+  .pub-item {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.2rem 1rem 1.4rem;
+    margin-bottom: 0.8rem;
+    border-left: 3px solid var(--navy);
+    position: relative;
+  }
+  .pub-authors { font-size: 0.84rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+  .pub-authors strong { color: var(--navy); font-weight: 600; }
+  .pub-title { font-size: 0.92rem; font-weight: 500; font-style: italic; color: var(--text); margin-bottom: 0.3rem; }
+  .pub-venue { font-size: 0.82rem; color: var(--gold); font-weight: 500; }
+
+  /* COURSES LIST */
+  .course-list { list-style: none; }
+  .course-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--border);
+    gap: 1rem;
+    font-size: 0.88rem;
+  }
+  .course-list li:last-child { border-bottom: none; }
+  .course-name { flex: 1; color: var(--text); }
+  .course-right {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-shrink: 0;
+  }
+  .course-year { color: var(--text-muted); font-size: 0.8rem; }
+  .grade {
+    background: var(--section-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.1rem 0.45rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .grade-10 { background: #edf7ee; border-color: #9fd69f; color: #1e6b1e; }
+  .grade-9 { background: #fef9e7; border-color: #f9d571; color: #7a5c00; }
+  .grade-8 { background: #fdf2ea; border-color: #f5c99e; color: #8a4000; }
+
+  /* EVENTS */
+  .events-section { display: grid; gap: 0.5rem; }
+  .event-item {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem 0.75rem 1.2rem;
+    font-size: 0.87rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.6rem 1rem;
+    align-items: center;
+    border-left: 3px solid var(--border);
+  }
+  .event-item.expositor { border-left-color: var(--gold); }
+  .event-role {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+  .event-role.asistente { color: var(--text-muted); }
+  .event-name { color: var(--text); line-height: 1.4; }
+  .event-year { font-size: 0.78rem; color: var(--text-muted); text-align: right; white-space: nowrap; }
+
+  /* SKILLS */
+  .skills-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .skill-tag {
+    background: var(--navy);
+    color: rgba(255,255,255,0.88);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.83rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.55);
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.82rem;
+    margin-top: 3rem;
+  }
+  footer strong { color: rgba(255,255,255,0.8); }
+
+  @media (max-width: 640px) {
+    header h1 { font-size: 1.9rem; }
+    .profile-grid { grid-template-columns: 1fr; }
+    .pos-row { grid-template-columns: 1fr; gap: 0.2rem; }
+    .event-item { grid-template-columns: 1fr; gap: 0.2rem; }
+    .course-list li { flex-direction: column; gap: 0.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1>Luis Fernando Crespo</h1>
+    <p class="subtitle">Profesor en Matemática &nbsp;·&nbsp; Docente Universitario &nbsp;·&nbsp; Investigador en Educación Matemática</p>
+    <div class="contact-row">
+      <span class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Salta Capital, Argentina
+      </span>
+      <span class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <a href="mailto:luiscrespo111@gmail.com">luiscrespo111@gmail.com</a>
+      </span>
+      <span class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.09 6.09l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        (0388) 154962123
+      </span>
+      <span class="contact-item">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Nacido el 30 de octubre de 1986
+      </span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#formacion">Formación</a></li>
+    <li><a href="#postgrado">Posgrado</a></li>
+    <li><a href="#cargos">Cargos</a></li>
+    <li><a href="#docencia">Docencia</a></li>
+    <li><a href="#publicaciones">Publicaciones</a></li>
+    <li><a href="#congresos">Congresos</a></li>
+    <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#gestion">Gestión</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- FORMACIÓN ACADÉMICA -->
+  <section id="formacion">
+    <h2 class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      Formación Académica
+    </h2>
+    <div class="card">
+      <div class="card-meta">Grado · 2013</div>
+      <div class="card-title">Profesor en Matemática</div>
+      <div class="card-body">
+        <span class="badge">Título de Grado</span>
+        Defensa de seminario: 18 de diciembre de 2013.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-meta">Posgrado · En curso</div>
+      <div class="card-title">Maestría en Enseñanza de las Ciencias Exactas y Naturales</div>
+      <div class="card-body">
+        <span class="badge">En proyecto de Tesis</span>
+        Facultad de Ingeniería, Universidad Nacional del Comahue.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-meta">Especialización Docente</div>
+      <div class="card-title">Diploma Superior y Programa de Actualización en Docencia Superior</div>
+      <div class="card-body">
+        FEDUBA / CONADU – FCSO/UBA – CLACSO. Carga horaria: 128 horas. Resolución (CD) N° 3056/16.
+      </div>
+    </div>
+  </section>
+
+  <!-- CURSOS DE POSTGRADO -->
+  <section id="postgrado">
+    <h2 class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+      Cursos de Posgrado y Actualización
+    </h2>
+    <ul class="course-list">
+      <li>
+        <span class="course-name">Tutoría en Entornos Virtuales: Estrategias y Herramientas para el Acompañamiento Tutorial — <em>CEDITE, Universidad de Tucumán</em>. 80 hs.</span>
+        <div class="course-right"><span class="course-year">2025</span><span class="grade grade-9">9/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Herramientas Avanzadas para Aulas Virtuales — <em>CEDITE, Universidad de Tucumán</em>. 100 hs.</span>
+        <div class="course-right"><span class="course-year">2025</span><span class="grade grade-10">10/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Modelización Matemática en las Ciencias Exactas y Naturales — <em>Facultad de Ingeniería, UNCo</em>. 60 hs.</span>
+        <div class="course-right"><span class="course-year">2024</span><span class="grade grade-8">8/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Tecnología para la Enseñanza — <em>FACENA, Universidad Nacional del Nordeste</em>. 40 hs.</span>
+        <div class="course-right"><span class="course-year">2023</span><span class="grade grade-9">9/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Metodología de la Investigación Educativa — <em>Facultad de Ingeniería, UNCo</em>. 60 hs.</span>
+        <div class="course-right"><span class="course-year">2023</span><span class="grade grade-10">10/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Análisis y Producción de Materiales Didácticos — <em>Facultad de Ingeniería, UNCo</em>. 60 hs.</span>
+        <div class="course-right"><span class="course-year">2022</span><span class="grade grade-10">10/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Introducción a la Enseñanza de Ciencia, Tecnología, Ingeniería y Matemática — <em>Facultad de Ingeniería, UNCo</em>. 60 hs.</span>
+        <div class="course-right"><span class="course-year">2022</span><span class="grade grade-10">10/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Seminario: Evaluación en Clave Pedagógica y Didáctica — <em>Facultad de Ingeniería, UNCo</em>. 60 hs.</span>
+        <div class="course-right"><span class="course-year">2021</span><span class="grade grade-9">9/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Didáctica de la Matemática — <em>Facultad de Ingeniería, UNCo</em>. 60 hs.</span>
+        <div class="course-right"><span class="course-year">2021</span><span class="grade grade-8">8/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Tecnologías Digitales, Educación Matemática y Educación en Ciencias Naturales — <em>FAMAF, UNC</em>. 40 hs.</span>
+        <div class="course-right"><span class="course-year">2021</span><span class="grade grade-9">9/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Recursos Digitales Educativos — <em>Facultad de Ingeniería, UNCo</em>. 60 hs.</span>
+        <div class="course-right"><span class="course-year">2020</span><span class="grade grade-10">10/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Análisis y Teorías Curriculares — <em>Facultad de Ingeniería, UNCo</em>. 60 hs.</span>
+        <div class="course-right"><span class="course-year">2020</span><span class="grade grade-10">10/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Estadística Aplicada a la Investigación Educativa — <em>Facultad de Ingeniería, UNCo</em>. 60 hs.</span>
+        <div class="course-right"><span class="course-year">2019–2020</span><span class="grade grade-10">10/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Programación y Simulación Numérica con Scilab — <em>FCN, Universidad Nacional de Salta</em>. 60 hs.</span>
+        <div class="course-right"><span class="course-year">2019</span><span class="grade grade-9">9.8/10</span></div>
+      </li>
+      <li>
+        <span class="course-name">Análisis Numérico — <em>FCE, Universidad Nacional de Salta</em>. 100 hs.</span>
+        <div class="course-right"><span class="course-year">2018</span><span class="grade grade-9">9/10</span></div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- CARGOS ACTUALES -->
+  <section id="cargos">
+    <h2 class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+      Cargos Actuales
+    </h2>
+    <div class="pos-card">
+      <div class="pos-header">Universidad Nacional de Salta</div>
+
+      <div class="pos-row">
+        <span class="pos-year">2024–Cont.</span>
+        <div>
+          <div class="pos-title">Jefe de Trabajos Prácticos – Regular <span class="badge badge-gold">Semiexclusiva → Exclusiva</span></div>
+          <div class="pos-detail">Facultad de Ciencias Naturales · Sede Central · Matemática I · Resolución de Decanato 1338/2024. Ampliación a dedicación Exclusiva desde 29/11/2024 (Res. 1340/2024).</div>
+        </div>
+      </div>
+
+      <div class="pos-row">
+        <span class="pos-year">2023–Cont.</span>
+        <div>
+          <div class="pos-title">Profesor Adjunto – Regular <span class="badge">Simple</span></div>
+          <div class="pos-detail">Facultad de Ciencias Naturales · Sede Regional Metán-Rosario de la Frontera · Matemática I · Resolución DNAT-2023-932.</div>
+        </div>
+      </div>
+
+      <div class="pos-row">
+        <span class="pos-year">2015–Cont.</span>
+        <div>
+          <div class="pos-title">Jefe de Trabajos Prácticos – Regular <span class="badge">Simple</span></div>
+          <div class="pos-detail">Facultad de Ciencias Exactas · Sede Regional Metán-Rosario de la Frontera · Estructuras Algebraicas · Resolución EXA 351/2015. En licencia desde 29/10/2020 (Res. CD 170/2024).</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANTECEDENTES EN DOCENCIA -->
+  <section id="docencia">
+    <h2 class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Antecedentes en Docencia
+    </h2>
+    <div class="pos-card">
+      <div class="pos-header">Nivel Universitario — Universidad Nacional de Salta</div>
+      <div class="pos-row">
+        <span class="pos-year">2024–2025</span>
+        <div>
+          <div class="pos-title">Profesor Adjunto Interino – Coordinador del CIU 2025</div>
+          <div class="pos-detail">Sede Regional Metán-Rosario de la Frontera. Res. R-SRS-2024-048.</div>
+        </div>
+      </div>
+      <div class="pos-row">
+        <span class="pos-year">2018–2023</span>
+        <div>
+          <div class="pos-title">Jefe de Trabajos Prácticos Interino – Matemática I <span class="badge">Semiexclusiva → Exclusiva</span></div>
+          <div class="pos-detail">Facultad de Ciencias Naturales · Sede Central. Res. DNAT 1073/2018.</div>
+        </div>
+      </div>
+      <div class="pos-row">
+        <span class="pos-year">2020–2023</span>
+        <div>
+          <div class="pos-title">Profesor Adjunto Interino – Promocionado · Matemática I</div>
+          <div class="pos-detail">Facultad de Ciencias Naturales · Sede Regional Metán-Rosario de la Frontera. Res. DNAT-2020-333.</div>
+        </div>
+      </div>
+      <div class="pos-row">
+        <span class="pos-year">2017–2023</span>
+        <div>
+          <div class="pos-title">Jefe de Trabajos Prácticos Regular – Matemática I</div>
+          <div class="pos-detail">Facultad de Ciencias Naturales · Sede Regional Metán-Rosario de la Frontera. Res. DNAT 1241/2017.</div>
+        </div>
+      </div>
+      <div class="pos-row">
+        <span class="pos-year">2019–2020</span>
+        <div>
+          <div class="pos-title">Jefe de Trabajos Prácticos Interino – Matemática I <span class="badge">Semiexclusiva</span></div>
+          <div class="pos-detail">Facultad de Ciencias Exactas · Sede Central. Res. D-EXA 592/2019.</div>
+        </div>
+      </div>
+      <div class="pos-row">
+        <span class="pos-year">2014–2020</span>
+        <div>
+          <div class="pos-title">Auxiliar de 1° Categoría Interino – Matemática para Informática / Análisis Matemático I</div>
+          <div class="pos-detail">Facultad de Ciencias Exactas · Sede Central. Múltiples resoluciones. Incluye extensión a Análisis Matemático I (2015–2018).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pos-card" style="margin-top:1rem;">
+      <div class="pos-header">Nivel Superior — Institutos de Formación Docente (Salta)</div>
+      <div class="pos-row">
+        <span class="pos-year">2016–2018</span>
+        <div>
+          <div class="pos-title">Profesor Interino – Álgebra II, Cálculo Superior I y II, Especialista de Nivel</div>
+          <div class="pos-detail">IES N° 6.017 Prof. Amadeo Sirolli · Profesorado de Educación Secundaria en Matemática.</div>
+        </div>
+      </div>
+      <div class="pos-row">
+        <span class="pos-year">2015–2017</span>
+        <div>
+          <div class="pos-title">Profesor Interino – Álgebra Lineal, Álgebra 1, Aplicaciones de la Matemática</div>
+          <div class="pos-detail">IES N° 6.017 Prof. Amadeo Sirolli.</div>
+        </div>
+      </div>
+      <div class="pos-row">
+        <span class="pos-year">2014–2017</span>
+        <div>
+          <div class="pos-title">Profesor Interino – Matemática</div>
+          <div class="pos-detail">ISFD N° 6.028 Anexo Campo Quijano · Tecnicatura Superior en Minería.</div>
+        </div>
+      </div>
+      <div class="pos-row">
+        <span class="pos-year">2014–2015</span>
+        <div>
+          <div class="pos-title">Profesor Interino – Matemática</div>
+          <div class="pos-detail">IES N° 6.017 Prof. Amadeo Sirolli · Profesorado en Educación Primaria.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUBLICACIONES -->
+  <section id="publicaciones">
+    <h2 class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Publicaciones Científicas
+    </h2>
+
+    <div class="pub-item">
+      <div class="pub-authors"><strong>Crespo, L.</strong>, Ávila, M., Solís, B. y Moya, M.</div>
+      <div class="pub-title">Diseño de Objetos Digitales de Aprendizaje para abordar contenidos matemáticos en la carrera de Ingeniería Agronómica.</div>
+      <div class="pub-venue">Actas de las VIII Jornadas de Educación Matemática y V Jornadas de Investigación en Educación Matemática. Universidad Nacional del Litoral, 2025. ISBN 978-989-692-416-0. Págs. 517–528.</div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-authors">Ávila, M., <strong>Crespo, L.</strong>, Solís, B. y Moya, M.</div>
+      <div class="pub-title">Objeto Digital de Aprendizaje: una estrategia de alfabetización para el desarrollo de Competencias Digitales en el profesorado en matemática.</div>
+      <div class="pub-venue">Actas de las VIII Jornadas de Educación Matemática y V Jornadas de Investigación en Educación Matemática. UNL, 2025. ISBN 978-989-692-416-0. Págs. 389–400.</div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-authors">Solís, B., Moya, M., Ávila, M. y <strong>Crespo, L.</strong></div>
+      <div class="pub-title">Reconstrucción de un Lilium con cónicas: un problema de modelación matemática.</div>
+      <div class="pub-venue">Actas de las VIII Jornadas de Educación Matemática y V Jornadas de Investigación en Educación Matemática. UNL, 2025. ISBN 978-989-692-416-0. Págs. 401–411.</div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-authors">Ávila, M., <strong>Crespo, L.</strong>, Moya, M. y Solís, B.</div>
+      <div class="pub-title">Uso del ChatGPT como una estrategia de alfabetización en competencia digital docente en educación matemática.</div>
+      <div class="pub-venue">XIX Congreso de Tecnología en Educación y Educación en Tecnología. Universidad de Morón, 2024. ISBN 978-987-3977-95-4. Pág. 12.</div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-authors">Ávila, M. y <strong>Crespo, L.</strong></div>
+      <div class="pub-title">Herramienta de Realidad Aumentada para la conceptualización del límite de una función en un punto.</div>
+      <div class="pub-venue">XVI Congreso de Tecnología en Educación y Educación en Tecnología. UNLP, 2021. ISBN 978-950-34-2014-0. Pág. 52.</div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-authors">Moya, M., Ávila, M., Delupí, G., Pareja, S. y <strong>Crespo, L.</strong></div>
+      <div class="pub-title">Enseñanza innovadora en Análisis Matemático I.</div>
+      <div class="pub-venue">V Jornadas de Innovación Educativa. Universidad Nacional de Jujuy, 2020. ISBN 978-987-3926-64-8. Pág. 191.</div>
+    </div>
+  </section>
+
+  <!-- CONGRESOS Y EVENTOS -->
+  <section id="congresos">
+    <h2 class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Participación en Congresos y Eventos Científicos
+    </h2>
+    <p style="font-size:0.83rem; color:var(--text-muted); margin-bottom:1rem;">Presentaciones como expositor o coautor destacadas en <span style="color:var(--gold); font-weight:600;">dorado</span>.</p>
+    <div class="events-section">
+
+      <div class="event-item expositor">
+        <span class="event-role">Expositor</span>
+        <span class="event-name">VIII Jornadas de Educación Matemática y V Jornadas de Investigación en Educación Matemática — Universidad Nacional del Litoral (3 ponencias)</span>
+        <span class="event-year">2024</span>
+      </div>
+      <div class="event-item expositor">
+        <span class="event-role">Autor</span>
+        <span class="event-name">XIX Congreso de Tecnología en Educación y Educación en Tecnología — Universidad de Morón</span>
+        <span class="event-year">2024</span>
+      </div>
+      <div class="event-item expositor">
+        <span class="event-role">Expositor</span>
+        <span class="event-name">XVI Congreso de Tecnología en Educación y Educación en Tecnología — Facultad de Informática, UNLP</span>
+        <span class="event-year">2021</span>
+      </div>
+      <div class="event-item expositor">
+        <span class="event-role">Expositor</span>
+        <span class="event-name">IV Jornadas de Enseñanza de la Matemática — Dpto. de Matemática, FCE-UNSa (Taller: Límite. Intuición vs. Formalización)</span>
+        <span class="event-year">2019</span>
+      </div>
+      <div class="event-item expositor">
+        <span class="event-role">Coautor</span>
+        <span class="event-name">V Jornadas de Educación Educativa — Facultad de Ingeniería, Universidad Nacional de Jujuy</span>
+        <span class="event-year">2018</span>
+      </div>
+      <div class="event-item expositor">
+        <span class="event-role">Expositor</span>
+        <span class="event-name">Reunión Anual de la Unión Matemática Argentina — Universidad Nacional de Rosario (Números Reales Construibles)</span>
+        <span class="event-year">2013</span>
+      </div>
+      <div class="event-item">
+        <span class="event-role asistente">Asistente</span>
+        <span class="event-name">Encuentro de Educación Matemática EDEM 2022 — Universidad Nacional de General Sarmiento</span>
+        <span class="event-year">2022</span>
+      </div>
+      <div class="event-item">
+        <span class="event-role asistente">Asistente</span>
+        <span class="event-name">IV Coloquio de Matemática Educativa ITESO 2022 — Universidad Jesuita de Guadalajara</span>
+        <span class="event-year">2022</span>
+      </div>
+      <div class="event-item">
+        <span class="event-role asistente">Asistente</span>
+        <span class="event-name">XVI Congreso Dr. Antonio Monteiro — Universidad Nacional del Sur, Bahía Blanca</span>
+        <span class="event-year">2021</span>
+      </div>
+      <div class="event-item">
+        <span class="event-role asistente">Asistente</span>
+        <span class="event-name">Tecnología en Educación y Educación en Tecnología TE%ET 2020 — Universidad Nacional del Comahue</span>
+        <span class="event-year">2020</span>
+      </div>
+      <div class="event-item">
+        <span class="event-role asistente">Asistente</span>
+        <span class="event-name">Primer Encuentro Regional de la Unión Matemática Argentina — Universidad Nacional de Salta</span>
+        <span class="event-year">2017</span>
+      </div>
+      <div class="event-item">
+        <span class="event-role asistente">Asistente</span>
+        <span class="event-name">Escuela de Matemáticas de América Latina y el Caribe — Universidad Nacional de Salta</span>
+        <span class="event-year">2013</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROYECTOS DE INVESTIGACIÓN -->
+  <section id="proyectos">
+    <h2 class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Proyectos de Investigación
+    </h2>
+    <div class="card">
+      <div class="card-meta">CIUNSa Proyecto N° 2863/0-B · 2022–2024</div>
+      <div class="card-title">La enseñanza de los números enteros: momento de estudio la institucionalización en la ESO</div>
+      <div class="card-body">Colaborador Docente. Directora: Patagua, Ivone Anahí. C.I.U.N.Sa.</div>
+    </div>
+    <div class="card">
+      <div class="card-meta">CIUNSa Proyecto N° 2635/0-C · 2019–2021</div>
+      <div class="card-title">Acciones formativas para la conceptualización del límite de una función de una variable real</div>
+      <div class="card-body">Colaborador Docente. Director: Ávila, Mario Ubaldo. C.I.U.N.Sa.</div>
+    </div>
+    <div class="card">
+      <div class="card-meta">CIUNSa Proyecto N° 2349/0-A · 2017–2020</div>
+      <div class="card-title">TecnoMatemática: Profesor universitario en Matemática con TICs</div>
+      <div class="card-body">Colaborador Docente. Directora: Moya, María de las Mercedes. Resolución N° 024/2017-CI.</div>
+    </div>
+    <div class="card">
+      <div class="card-meta">2014</div>
+      <div class="card-title">La enseñanza de la matemática en el segundo ciclo del nivel primario</div>
+      <div class="card-body">Función: Capacitador. Resolución 151/14. Duración: 120 horas reloj. Modalidad semipresencial.</div>
+    </div>
+  </section>
+
+  <!-- GESTIÓN -->
+  <section id="gestion">
+    <h2 class="section-title">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Gestión Institucional y Competencias
+    </h2>
+
+    <div class="card">
+      <div class="card-meta">Gestión Universitaria</div>
+      <div class="card-title">Cargos de Gestión y Representación Institucional</div>
+      <div class="card-body">
+        <ul style="list-style:disc; padding-left:1.4rem; display:flex; flex-direction:column; gap:0.4rem; margin-top:0.3rem;">
+          <li>Integrante del Consejo Asesor de la Sede Regional Metán-Rosario de la Frontera — Representante del Estamento de Profesores (desde abril 2025). Res. 27/2025-SRS-UNSa.</li>
+          <li>Integrante del Consejo Asesor de la Sede Regional Metán-Rosario de la Frontera — Representante del Claustro de Auxiliares de la Docencia (2022–2025).</li>
+          <li>Integrante de la Comisión de Docencia, Escuela de Geología (Res. DNAT-2023-1654 y RD-0609-2025-NAT).</li>
+          <li>Integrante de la Comisión de Informática y Plataforma Digital, Escuela de Geología (Res. DNAT-2022-0905).</li>
+          <li>Coordinador de la Comisión de Biblioteca, Escuela de Geología (Res. DNAT-2020-635).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-meta">Herramientas y Software</div>
+      <div class="card-title">Competencias Informáticas</div>
+      <div class="card-body" style="margin-bottom:0.7rem;">Manejo avanzado de software especializado en educación matemática y computación científica:</div>
+      <div class="skills-row">
+        <span class="skill-tag">GeoGebra</span>
+        <span class="skill-tag">Scilab</span>
+        <span class="skill-tag">WinPlot</span>
+        <span class="skill-tag">Derive</span>
+        <span class="skill-tag">LyX</span>
+        <span class="skill-tag">Scientific Word</span>
+        <span class="skill-tag">Moodle</span>
+        <span class="skill-tag">Entornos Virtuales</span>
+        <span class="skill-tag">ChatGPT / IAGen</span>
+        <span class="skill-tag">Realidad Aumentada</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-meta">Extensión Universitaria</div>
+      <div class="card-title">Cursos y Talleres de Extensión Dictados</div>
+      <div class="card-body">
+        <ul style="list-style:disc; padding-left:1.4rem; display:flex; flex-direction:column; gap:0.4rem; margin-top:0.3rem;">
+          <li><strong>Taller "Preparación del examen final de Matemática I"</strong> — destinado a alumnos de Ingeniería Agronómica (Res. SRMRF 149/2022).</li>
+          <li><strong>Geometría Básica en la Escuela Secundaria</strong> (2014) — 50 hs., para docentes de nivel medio y superior (Res. EXA 300/2014 y 667/2014).</li>
+          <li><strong>Resolución de Problemas con GeoGebra</strong> (2012) — 40 hs., para docentes de nivel medio y superior (Res. EXA 710/2012).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Curriculum Vitae Académico · <strong>Luis Fernando Crespo</strong> · Salta, Argentina · 2025</p>
+  <p style="margin-top:0.4rem; font-size:0.76rem;">Publicado en GitHub Pages · luiscrespo111@gmail.com</p>
+</footer>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const link = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
