@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración — CV Luis Crespo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1a1a2e;
+      --ink-light: #2d2d4e;
+      --paper: #f5f0e8;
+      --cream: #faf7f2;
+      --accent: #8b4513;
+      --accent-light: #c4763a;
+      --gold: #b8860b;
+      --gold-light: #daa520;
+      --border: #d4c9b0;
+      --success: #2d6a4f;
+      --danger: #8b1a1a;
+      --muted: #7a7060;
+      --shadow: 0 2px 12px rgba(26,26,46,0.10);
+      --shadow-lg: 0 8px 32px rgba(26,26,46,0.16);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Crimson Pro', Georgia, serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ink);
+      background-image: repeating-linear-gradient(
+        45deg, transparent, transparent 40px,
+        rgba(255,255,255,.015) 40px, rgba(255,255,255,.015) 80px
+      );
+    }
+    .login-box {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      padding: 3rem 3.5rem;
+      width: 400px;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+    .login-box .monogram {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      letter-spacing: .3em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .login-box h1 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: .3rem;
+    }
+    .login-box p { color: var(--muted); font-size: 1rem; margin-bottom: 2rem; }
+    .login-box input[type="password"] {
+      width: 100%;
+      padding: .8rem 1rem;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .95rem;
+      color: var(--ink);
+      outline: none;
+      letter-spacing: .2em;
+      margin-bottom: 1rem;
+      transition: border-color .2s;
+    }
+    .login-box input[type="password"]:focus { border-color: var(--accent); }
+    .btn-login {
+      width: 100%;
+      padding: .85rem;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-login:hover { background: var(--accent); }
+    .login-error {
+      color: var(--danger);
+      font-size: .9rem;
+      margin-top: .75rem;
+      min-height: 1.2em;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    #app { display: none; }
+    header {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 2px solid var(--accent);
+    }
+    header .title {
+      display: flex; align-items: baseline; gap: 1rem;
+    }
+    header h1 { font-size: 1.3rem; font-weight: 600; }
+    header .sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .2em;
+      color: var(--gold-light);
+      text-transform: uppercase;
+    }
+    .btn-logout {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.3);
+      color: var(--paper);
+      padding: .4rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .15em;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-logout:hover { border-color: var(--accent-light); color: var(--accent-light); }
+
+    .main-wrap {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* ── SIDEBAR ── */
+    aside {
+      background: var(--cream);
+      border-right: 1px solid var(--border);
+      padding: 2rem 0;
+    }
+    aside h2 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem;
+      letter-spacing: .25em;
+      color: var(--muted);
+      text-transform: uppercase;
+      padding: 0 1.5rem 1rem;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: .75rem 1.5rem;
+      cursor: pointer;
+      transition: background .15s;
+      border-left: 3px solid transparent;
+      font-size: 1rem;
+    }
+    .nav-item:hover { background: rgba(139,69,19,.07); }
+    .nav-item.active {
+      background: rgba(139,69,19,.12);
+      border-left-color: var(--accent);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .nav-icon { font-size: 1.1rem; width: 1.4rem; text-align: center; }
+
+    /* ── CONTENT ── */
+    main { padding: 2.5rem 3rem; overflow-y: auto; }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .section-header h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .section-header .count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      color: var(--muted);
+      letter-spacing: .1em;
+    }
+
+    /* ── BUTTON ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .6rem 1.3rem;
+      border: none;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: all .2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent-light); }
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: .3rem .7rem;
+      font-size: .65rem;
+    }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+    .btn-edit {
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: .3rem .7rem;
+      font-size: .65rem;
+    }
+    .btn-edit:hover { background: var(--gold); color: #fff; }
+
+    /* ── CARDS ── */
+    .card-list { display: flex; flex-direction: column; gap: 1rem; }
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: start;
+    }
+    .card-title { font-weight: 600; font-size: 1.05rem; margin-bottom: .25rem; }
+    .card-sub { color: var(--muted); font-size: .95rem; }
+    .card-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      color: var(--gold);
+      letter-spacing: .08em;
+      margin-top: .3rem;
+    }
+    .card-actions { display: flex; gap: .4rem; flex-shrink: 0; }
+
+    /* ── MODAL / FORM ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(26,26,46,.5);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      width: 560px;
+      max-width: 95vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(20px);
+      transition: transform .25s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .4rem;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: .7rem .9rem;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      font-family: 'Crimson Pro', serif;
+      font-size: 1rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--accent); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: .75rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .btn-cancel {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: .6rem 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      letter-spacing: .12em;
+      cursor: pointer;
+    }
+    .btn-cancel:hover { border-color: var(--ink); color: var(--ink); }
+
+    /* ── EXPORT SECTION ── */
+    .export-box {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    .export-box h3 { font-size: 1.2rem; margin-bottom: .75rem; color: var(--gold-light); }
+    .export-box p { font-size: .95rem; color: rgba(245,240,232,.75); margin-bottom: 1.25rem; }
+    .export-box pre {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.15);
+      padding: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      color: var(--gold-light);
+      overflow-x: auto;
+      margin-bottom: 1rem;
+    }
+    .btn-export {
+      background: var(--gold);
+      color: var(--ink);
+      padding: .7rem 1.5rem;
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-export:hover { background: var(--gold-light); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--success);
+      color: #fff;
+      padding: .85rem 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      letter-spacing: .1em;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all .3s;
+      z-index: 300;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--muted);
+    }
+    .empty .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty p { font-size: 1.1rem; }
+    .section-panel { display: none; }
+    .section-panel.active { display: block; }
+
+    /* ── STATS ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+    .stat-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .stat-card .num {
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-card .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: .4rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <p class="monogram">luiscrespo-cv · admin</p>
+    <h1>Panel de Administración</h1>
+    <p>Ingresá tu contraseña para continuar</p>
+    <input type="password" id="pwd-input" placeholder="••••••••" autocomplete="current-password" />
+    <button class="btn-login" onclick="doLogin()">Ingresar →</button>
+    <p class="login-error" id="login-error"></p>
+  </div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app">
+  <header>
+    <div class="title">
+      <h1>Dr. Luis Fernando Crespo</h1>
+      <span class="sub">Admin · CV</span>
+    </div>
+    <button class="btn-logout" onclick="logout()">✕ Cerrar sesión</button>
+  </header>
+
+  <div class="main-wrap">
+    <!-- Sidebar -->
+    <aside>
+      <h2>Secciones</h2>
+      <div class="nav-item active" onclick="showSection('dashboard')" data-sec="dashboard">
+        <span class="nav-icon">📊</span> Resumen
+      </div>
+      <div class="nav-item" onclick="showSection('cargos')" data-sec="cargos">
+        <span class="nav-icon">🏛️</span> Cargos
+      </div>
+      <div class="nav-item" onclick="showSection('publicaciones')" data-sec="publicaciones">
+        <span class="nav-icon">📄</span> Publicaciones
+      </div>
+      <div class="nav-item" onclick="showSection('proyectos')" data-sec="proyectos">
+        <span class="nav-icon">🔬</span> Proyectos
+      </div>
+      <div class="nav-item" onclick="showSection('gestion')" data-sec="gestion">
+        <span class="nav-icon">🏛️</span> Gestión
+      </div>
+      <div class="nav-item" onclick="showSection('congresos')" data-sec="congresos">
+        <span class="nav-icon">🎤</span> Congresos
+      </div>
+      <div class="nav-item" onclick="showSection('exportar')" data-sec="exportar">
+        <span class="nav-icon">⬇️</span> Exportar CV
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main>
+
+      <!-- ── DASHBOARD ── -->
+      <div id="sec-dashboard" class="section-panel active">
+        <div class="section-header">
+          <h2>Resumen del CV</h2>
+        </div>
+        <div class="stats-grid" id="stats-grid"></div>
+        <div style="background:#fff;border:1px solid var(--border);padding:1.5rem;box-shadow:var(--shadow)">
+          <p style="font-size:1.05rem;color:var(--muted);line-height:1.7">
+            Bienvenido al panel de administración de tu CV. Usá el menú lateral para agregar, editar o eliminar entradas en cada sección. Una vez que hayas hecho los cambios, dirigite a <strong>Exportar CV</strong> para descargar el archivo HTML actualizado y reemplazarlo en tu repositorio de GitHub.
+          </p>
+        </div>
+      </div>
+
+      <!-- ── CARGOS ── -->
+      <div id="sec-cargos" class="section-panel">
+        <div class="section-header">
+          <h2>Cargos Docentes</h2>
+          <span class="count" id="count-cargos"></span>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('cargos')">➕ Agregar cargo</button>
+        <div class="card-list" id="list-cargos" style="margin-top:1.5rem"></div>
+      </div>
+
+      <!-- ── PUBLICACIONES ── -->
+      <div id="sec-publicaciones" class="section-panel">
+        <div class="section-header">
+          <h2>Publicaciones Científicas</h2>
+          <span class="count" id="count-publicaciones"></span>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('publicaciones')">➕ Agregar publicación</button>
+        <div class="card-list" id="list-publicaciones" style="margin-top:1.5rem"></div>
+      </div>
+
+      <!-- ── PROYECTOS ── -->
+      <div id="sec-proyectos" class="section-panel">
+        <div class="section-header">
+          <h2>Proyectos de Investigación</h2>
+          <span class="count" id="count-proyectos"></span>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('proyectos')">➕ Agregar proyecto</button>
+        <div class="card-list" id="list-proyectos" style="margin-top:1.5rem"></div>
+      </div>
+
+      <!-- ── GESTIÓN ── -->
+      <div id="sec-gestion" class="section-panel">
+        <div class="section-header">
+          <h2>Gestión Institucional</h2>
+          <span class="count" id="count-gestion"></span>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('gestion')">➕ Agregar gestión</button>
+        <div class="card-list" id="list-gestion" style="margin-top:1.5rem"></div>
+      </div>
+
+      <!-- ── CONGRESOS ── -->
+      <div id="sec-congresos" class="section-panel">
+        <div class="section-header">
+          <h2>Congresos y Eventos</h2>
+          <span class="count" id="count-congresos"></span>
+        </div>
+        <button class="btn btn-primary" onclick="openModal('congresos')">➕ Agregar congreso</button>
+        <div class="card-list" id="list-congresos" style="margin-top:1.5rem"></div>
+      </div>
+
+      <!-- ── EXPORTAR ── -->
+      <div id="sec-exportar" class="section-panel">
+        <div class="section-header">
+          <h2>Exportar CV Actualizado</h2>
+        </div>
+        <div style="background:#fff;border:1px solid var(--border);padding:2rem;box-shadow:var(--shadow);margin-bottom:1.5rem">
+          <p style="font-size:1.1rem;line-height:1.7;margin-bottom:1.25rem">
+            Al presionar el botón se genera y descarga el archivo <code style="background:var(--paper);padding:.1rem .4rem;font-family:'JetBrains Mono',monospace;font-size:.85rem">index.html</code> con todos los datos actualizados. Luego reemplazalo en tu repositorio GitHub.
+          </p>
+          <button class="btn btn-primary" style="font-size:.8rem;padding:.8rem 1.8rem" onclick="exportCV()">
+            ⬇️ &nbsp;Descargar index.html actualizado
+          </button>
+        </div>
+        <div class="export-box">
+          <h3>📋 Cómo subir a GitHub</h3>
+          <p>Seguí estos pasos para publicar los cambios en tu CV online:</p>
+          <pre>1. Descargá el index.html generado
+2. Abrí tu repositorio en GitHub:
+   github.com/luiscrespo111/luiscrespo-cv
+3. Hacé clic en index.html → Edit (lápiz)
+4. Borrá todo el contenido y pegá el nuevo
+5. Commit changes → "Actualizar CV"
+6. GitHub Pages publica en ~30 segundos</pre>
+          <p style="margin-bottom:.75rem">O con Git desde la terminal:</p>
+          <pre>git add index.html
+git commit -m "Actualizar CV"
+git push origin main</pre>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ══════════ MODAL ══════════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modal-box">
+    <h3 id="modal-title">Agregar</h3>
+    <div id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveEntry()">💾 &nbsp;Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   AUTENTICACIÓN
+══════════════════════════════════════════ */
+const PASSWORD = 'crespo2025'; // ← CAMBIÁ ESTA CONTRASEÑA
+
+function doLogin() {
+  const v = document.getElementById('pwd-input').value;
+  if (v === PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    renderAll();
+  } else {
+    document.getElementById('login-error').textContent = 'Contraseña incorrecta. Intentá de nuevo.';
+    document.getElementById('pwd-input').value = '';
+  }
+}
+document.getElementById('pwd-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+function logout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('pwd-input').value = '';
+  document.getElementById('login-error').textContent = '';
+}
+
+/* ══════════════════════════════════════════
+   DATOS INICIALES (desde el CV actual)
+══════════════════════════════════════════ */
+const DEFAULTS = {
+  cargos: [
+    { id: 1, periodo: '2024–Cont.', cargo: 'Jefe de Trabajos Prácticos – Regular Semiexclusiva → Exclusiva', institucion: 'Facultad de Ciencias Naturales · UNSa', materia: 'Matemática I', resolucion: 'Res. Decanato 1338/2024', tipo: 'actual' },
+    { id: 2, periodo: '2023–Cont.', cargo: 'Profesor Adjunto – Regular Simple', institucion: 'Facultad de Ciencias Naturales · Sede Metán', materia: 'Matemática I', resolucion: 'Res. DNAT-2023-932', tipo: 'actual' },
+    { id: 3, periodo: '2015–Cont.', cargo: 'Jefe de Trabajos Prácticos – Regular Simple', institucion: 'Facultad de Ciencias Exactas · Sede Metán', materia: 'Estructuras Algebraicas', resolucion: 'Res. EXA 351/2015', tipo: 'actual' },
+  ],
+  publicaciones: [
+    { id: 1, anio: '2025', autores: 'Crespo, L., Ávila, M., Solís, B. y Moya, M.', titulo: 'Diseño de Objetos Digitales de Aprendizaje para abordar contenidos matemáticos en la carrera de Ingeniería Agronómica.', evento: 'VIII Jornadas de Educación Matemática. UNL', isbn: '978-989-692-416-0', paginas: '517–528' },
+    { id: 2, anio: '2025', autores: 'Ávila, M., Crespo, L., Solís, B. y Moya, M.', titulo: 'Objeto Digital de Aprendizaje: una estrategia de alfabetización para el desarrollo de Competencias Digitales en el profesorado en matemática.', evento: 'VIII Jornadas de Educación Matemática. UNL', isbn: '978-989-692-416-0', paginas: '389–400' },
+    { id: 3, anio: '2024', autores: 'Ávila, M., Crespo, L., Moya, M. y Solís, B.', titulo: 'Uso del ChatGPT como una estrategia de alfabetización en competencia digital docente en educación matemática.', evento: 'XIX Congreso TE&ET. Universidad de Morón', isbn: '978-987-3977-95-4', paginas: '12' },
+    { id: 4, anio: '2021', autores: 'Ávila, M. y Crespo, L.', titulo: 'Herramienta de Realidad Aumentada para la conceptualización del límite de una función en un punto.', evento: 'XVI Congreso TE&ET. UNLP', isbn: '978-950-34-2014-0', paginas: '52' },
+  ],
+  proyectos: [
+    { id: 1, periodo: '2022–2024', codigo: 'CIUNSa N° 2863/0-B', titulo: 'La enseñanza de los números enteros: momento de estudio la institucionalización en la ESO', rol: 'Colaborador Docente', director: 'Patagua, Ivone Anahí' },
+    { id: 2, periodo: '2019–2021', codigo: 'CIUNSa N° 2635/0-C', titulo: 'Acciones formativas para la conceptualización del límite de una función de una variable real', rol: 'Colaborador Docente', director: 'Ávila, Mario Ubaldo' },
+    { id: 3, periodo: '2017–2020', codigo: 'CIUNSa N° 2349/0-A', titulo: 'TecnoMatemática: Profesor universitario en Matemática con TICs', rol: 'Colaborador Docente', director: 'Moya, María de las Mercedes' },
+  ],
+  gestion: [
+    { id: 1, anio: 'Desde 2025', cargo: 'Integrante del Consejo Asesor – Sede Regional Metán', detalle: 'Representante del Estamento de Profesores', resolucion: 'Res. 27/2025-SRS-UNSa' },
+    { id: 2, anio: '2022–2025', cargo: 'Integrante del Consejo Asesor – Sede Regional Metán', detalle: 'Representante del Claustro de Auxiliares de la Docencia', resolucion: '' },
+    { id: 3, anio: '2023', cargo: 'Integrante de la Comisión de Docencia, Escuela de Geología', detalle: '', resolucion: 'Res. DNAT-2023-1654' },
+    { id: 4, anio: '2022', cargo: 'Integrante de la Comisión de Informática y Plataforma Digital, Escuela de Geología', detalle: '', resolucion: 'Res. DNAT-2022-0905' },
+    { id: 5, anio: '2020', cargo: 'Coordinador de la Comisión de Biblioteca, Escuela de Geología', detalle: '', resolucion: 'Res. DNAT-2020-635' },
+  ],
+  congresos: [
+    { id: 1, anio: '2025', evento: 'VIII Jornadas de Educación Matemática y V Jornadas de Investigación en Educación Matemática', lugar: 'Universidad Nacional del Litoral', rol: 'Expositor', ponencias: '3 ponencias' },
+    { id: 2, anio: '2024', evento: 'XIX Congreso de Tecnología en Educación y Educación en Tecnología', lugar: 'Universidad de Morón', rol: 'Autor', ponencias: '' },
+    { id: 3, anio: '2021', evento: 'XVI Congreso de Tecnología en Educación y Educación en Tecnología', lugar: 'Facultad de Informática, UNLP', rol: 'Expositor', ponencias: '' },
+    { id: 4, anio: '2019', evento: 'IV Jornadas de Enseñanza de la Matemática', lugar: 'FCE-UNSa', rol: 'Expositor', ponencias: 'Taller: Límite. Intuición vs. Formalización' },
+    { id: 5, anio: '2013', evento: 'Reunión Anual de la Unión Matemática Argentina', lugar: 'Universidad Nacional de Rosario', rol: 'Expositor', ponencias: 'Números Reales Construibles' },
+  ],
+};
+
+function getData() {
+  const raw = localStorage.getItem('cv_data');
+  return raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(DEFAULTS));
+}
+function saveData(data) {
+  localStorage.setItem('cv_data', JSON.stringify(data));
+}
+function nextId(arr) {
+  return arr.length ? Math.max(...arr.map(x => x.id)) + 1 : 1;
+}
+
+/* ══════════════════════════════════════════
+   NAVEGACIÓN
+══════════════════════════════════════════ */
+function showSection(sec) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('sec-' + sec).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector('[data-sec="' + sec + '"]').classList.add('active');
+  renderSection(sec);
+}
+
+/* ══════════════════════════════════════════
+   RENDER
+══════════════════════════════════════════ */
+function renderAll() {
+  renderDashboard();
+}
+
+function renderDashboard() {
+  const d = getData();
+  const grid = document.getElementById('stats-grid');
+  const sections = [
+    { key: 'cargos', label: 'Cargos', icon: '🏛️' },
+    { key: 'publicaciones', label: 'Publicaciones', icon: '📄' },
+    { key: 'proyectos', label: 'Proyectos', icon: '🔬' },
+    { key: 'gestion', label: 'Gestión', icon: '📋' },
+    { key: 'congresos', label: 'Congresos', icon: '🎤' },
+  ];
+  grid.innerHTML = sections.map(s => `
+    <div class="stat-card" onclick="showSection('${s.key}')" style="cursor:pointer">
+      <div class="num">${d[s.key].length}</div>
+      <div class="label">${s.icon} ${s.label}</div>
+    </div>
+  `).join('');
+}
+
+function renderSection(sec) {
+  if (sec === 'dashboard') { renderDashboard(); return; }
+  if (sec === 'exportar') return;
+  const d = getData();
+  const list = document.getElementById('list-' + sec);
+  const count = document.getElementById('count-' + sec);
+  const items = d[sec];
+  count.textContent = items.length + ' entrada' + (items.length !== 1 ? 's' : '');
+
+  if (!items.length) {
+    list.innerHTML = `<div class="empty"><div class="icon">📭</div><p>No hay entradas aún. Agregá la primera.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = items.map(item => cardHTML(sec, item)).join('');
+}
+
+function cardHTML(sec, item) {
+  let title = '', sub = '', meta = '';
+  if (sec === 'cargos') {
+    title = item.cargo;
+    sub = item.institucion + (item.materia ? ' · ' + item.materia : '');
+    meta = item.periodo + (item.resolucion ? ' · ' + item.resolucion : '');
+  } else if (sec === 'publicaciones') {
+    title = item.titulo;
+    sub = item.autores;
+    meta = item.anio + ' · ' + item.evento + (item.isbn ? ' · ISBN ' + item.isbn : '');
+  } else if (sec === 'proyectos') {
+    title = item.titulo;
+    sub = item.rol + (item.director ? ' · Dir.: ' + item.director : '');
+    meta = item.periodo + ' · ' + item.codigo;
+  } else if (sec === 'gestion') {
+    title = item.cargo;
+    sub = item.detalle;
+    meta = item.anio + (item.resolucion ? ' · ' + item.resolucion : '');
+  } else if (sec === 'congresos') {
+    title = item.evento;
+    sub = item.lugar + (item.ponencias ? ' · ' + item.ponencias : '');
+    meta = item.anio + ' · ' + item.rol;
+  }
+  return `
+    <div class="card">
+      <div>
+        <div class="card-title">${esc(title)}</div>
+        ${sub ? `<div class="card-sub">${esc(sub)}</div>` : ''}
+        ${meta ? `<div class="card-meta">${esc(meta)}</div>` : ''}
+      </div>
+      <div class="card-actions">
+        <button class="btn btn-edit" onclick="openModal('${sec}', ${item.id})">✏️</button>
+        <button class="btn btn-danger" onclick="deleteEntry('${sec}', ${item.id})">🗑️</button>
+      </div>
+    </div>`;
+}
+
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ══════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════ */
+let currentSection = null;
+let editId = null;
+
+const FORMS = {
+  cargos: (item) => `
+    <div class="form-row">
+      <div class="form-group"><label>Período</label><input id="f-periodo" value="${esc(item?.periodo||'')}" placeholder="2024–Cont." /></div>
+      <div class="form-group"><label>Tipo</label><select id="f-tipo"><option value="actual" ${item?.tipo==='actual'?'selected':''}>Actual</option><option value="anterior" ${item?.tipo==='anterior'?'selected':''}>Anterior</option></select></div>
+    </div>
+    <div class="form-group"><label>Cargo / Categoría</label><input id="f-cargo" value="${esc(item?.cargo||'')}" placeholder="Profesor Adjunto – Regular Simple" /></div>
+    <div class="form-group"><label>Institución / Sede</label><input id="f-institucion" value="${esc(item?.institucion||'')}" placeholder="Facultad de Ciencias Naturales · UNSa" /></div>
+    <div class="form-group"><label>Materia / Asignatura</label><input id="f-materia" value="${esc(item?.materia||'')}" placeholder="Matemática I" /></div>
+    <div class="form-group"><label>Resolución</label><input id="f-resolucion" value="${esc(item?.resolucion||'')}" placeholder="Res. DNAT-2024-XXX" /></div>`,
+
+  publicaciones: (item) => `
+    <div class="form-group"><label>Año</label><input id="f-anio" value="${esc(item?.anio||'')}" placeholder="2025" /></div>
+    <div class="form-group"><label>Autores (en orden de firma)</label><textarea id="f-autores" rows="2" placeholder="Crespo, L., Ávila, M., ...">${esc(item?.autores||'')}</textarea></div>
+    <div class="form-group"><label>Título completo</label><textarea id="f-titulo" rows="3" placeholder="Título de la publicación">${esc(item?.titulo||'')}</textarea></div>
+    <div class="form-group"><label>Evento / Revista / Editorial</label><input id="f-evento" value="${esc(item?.evento||'')}" placeholder="VIII Jornadas de Educación Matemática. UNL" /></div>
+    <div class="form-row">
+      <div class="form-group"><label>ISBN / ISSN</label><input id="f-isbn" value="${esc(item?.isbn||'')}" placeholder="978-XXX-XXX-XXX-X" /></div>
+      <div class="form-group"><label>Páginas</label><input id="f-paginas" value="${esc(item?.paginas||'')}" placeholder="517–528" /></div>
+    </div>`,
+
+  proyectos: (item) => `
+    <div class="form-row">
+      <div class="form-group"><label>Período</label><input id="f-periodo" value="${esc(item?.periodo||'')}" placeholder="2022–2024" /></div>
+      <div class="form-group"><label>Código / N° Proyecto</label><input id="f-codigo" value="${esc(item?.codigo||'')}" placeholder="CIUNSa N° 2863/0-B" /></div>
+    </div>
+    <div class="form-group"><label>Título del proyecto</label><textarea id="f-titulo" rows="3" placeholder="Título completo del proyecto">${esc(item?.titulo||'')}</textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Rol / Función</label><input id="f-rol" value="${esc(item?.rol||'')}" placeholder="Colaborador Docente" /></div>
+      <div class="form-group"><label>Director/a</label><input id="f-director" value="${esc(item?.director||'')}" placeholder="Apellido, Nombre" /></div>
+    </div>`,
+
+  gestion: (item) => `
+    <div class="form-group"><label>Año / Período</label><input id="f-anio" value="${esc(item?.anio||'')}" placeholder="Desde 2025" /></div>
+    <div class="form-group"><label>Cargo / Función</label><input id="f-cargo" value="${esc(item?.cargo||'')}" placeholder="Integrante de la Comisión de..." /></div>
+    <div class="form-group"><label>Detalle adicional</label><input id="f-detalle" value="${esc(item?.detalle||'')}" placeholder="Descripción o rol específico" /></div>
+    <div class="form-group"><label>Resolución</label><input id="f-resolucion" value="${esc(item?.resolucion||'')}" placeholder="Res. DNAT-XXXX-XXX" /></div>`,
+
+  congresos: (item) => `
+    <div class="form-row">
+      <div class="form-group"><label>Año</label><input id="f-anio" value="${esc(item?.anio||'')}" placeholder="2025" /></div>
+      <div class="form-group"><label>Rol</label><select id="f-rol"><option value="Expositor" ${item?.rol==='Expositor'?'selected':''}>Expositor</option><option value="Autor" ${item?.rol==='Autor'?'selected':''}>Autor</option><option value="Coautor" ${item?.rol==='Coautor'?'selected':''}>Coautor</option><option value="Asistente" ${item?.rol==='Asistente'?'selected':''}>Asistente</option></select></div>
+    </div>
+    <div class="form-group"><label>Nombre del evento</label><input id="f-evento" value="${esc(item?.evento||'')}" placeholder="VIII Jornadas de Educación Matemática..." /></div>
+    <div class="form-group"><label>Institución / Lugar</label><input id="f-lugar" value="${esc(item?.lugar||'')}" placeholder="Universidad Nacional de..." /></div>
+    <div class="form-group"><label>Ponencias / Descripción</label><input id="f-ponencias" value="${esc(item?.ponencias||'')}" placeholder="Título de la ponencia (opcional)" /></div>`,
+};
+
+const LABELS = {
+  cargos: 'Cargo Docente',
+  publicaciones: 'Publicación',
+  proyectos: 'Proyecto de Investigación',
+  gestion: 'Gestión Institucional',
+  congresos: 'Congreso / Evento',
+};
+
+function openModal(sec, id = null) {
+  currentSection = sec;
+  editId = id;
+  const d = getData();
+  const item = id ? d[sec].find(x => x.id === id) : null;
+  document.getElementById('modal-title').textContent = (id ? 'Editar' : 'Agregar') + ' · ' + LABELS[sec];
+  document.getElementById('modal-body').innerHTML = FORMS[sec](item);
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  currentSection = null;
+  editId = null;
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function getFieldVal(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function saveEntry() {
+  const d = getData();
+  let entry = {};
+
+  if (currentSection === 'cargos') {
+    entry = { periodo: getFieldVal('f-periodo'), cargo: getFieldVal('f-cargo'), institucion: getFieldVal('f-institucion'), materia: getFieldVal('f-materia'), resolucion: getFieldVal('f-resolucion'), tipo: getFieldVal('f-tipo') };
+  } else if (currentSection === 'publicaciones') {
+    entry = { anio: getFieldVal('f-anio'), autores: getFieldVal('f-autores'), titulo: getFieldVal('f-titulo'), evento: getFieldVal('f-evento'), isbn: getFieldVal('f-isbn'), paginas: getFieldVal('f-paginas') };
+  } else if (currentSection === 'proyectos') {
+    entry = { periodo: getFieldVal('f-periodo'), codigo: getFieldVal('f-codigo'), titulo: getFieldVal('f-titulo'), rol: getFieldVal('f-rol'), director: getFieldVal('f-director') };
+  } else if (currentSection === 'gestion') {
+    entry = { anio: getFieldVal('f-anio'), cargo: getFieldVal('f-cargo'), detalle: getFieldVal('f-detalle'), resolucion: getFieldVal('f-resolucion') };
+  } else if (currentSection === 'congresos') {
+    entry = { anio: getFieldVal('f-anio'), rol: getFieldVal('f-rol'), evento: getFieldVal('f-evento'), lugar: getFieldVal('f-lugar'), ponencias: getFieldVal('f-ponencias') };
+  }
+
+  if (editId) {
+    const idx = d[currentSection].findIndex(x => x.id === editId);
+    d[currentSection][idx] = { ...d[currentSection][idx], ...entry };
+  } else {
+    entry.id = nextId(d[currentSection]);
+    d[currentSection].unshift(entry);
+  }
+
+  saveData(d);
+  closeModal();
+  renderSection(currentSection);
+  renderDashboard();
+  showToast(editId ? 'Entrada actualizada ✓' : 'Entrada guardada ✓');
+}
+
+function deleteEntry(sec, id) {
+  if (!confirm('¿Eliminár esta entrada?')) return;
+  const d = getData();
+  d[sec] = d[sec].filter(x => x.id !== id);
+  saveData(d);
+  renderSection(sec);
+  renderDashboard();
+  showToast('Entrada eliminada');
+}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+/* ══════════════════════════════════════════
+   EXPORTAR CV (index.html completo)
+══════════════════════════════════════════ */
+function exportCV() {
+  const d = getData();
+  const html = buildIndexHTML(d);
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'index.html';
+  a.click();
+  showToast('index.html descargado ✓');
+}
+
+function buildIndexHTML(d) {
+  // Cargos actuales
+  const cargosActuales = d.cargos.filter(c => c.tipo === 'actual');
+  const cargosAnteriores = d.cargos.filter(c => c.tipo === 'anterior');
+
+  const renderCargo = c => `
+        <div class="cargo-entry">
+          <div class="cargo-periodo">${h(c.periodo)}</div>
+          <div class="cargo-cargo">${h(c.cargo)}</div>
+          <div class="cargo-inst">${h(c.institucion)}${c.materia ? ' · ' + h(c.materia) : ''}</div>
+          ${c.resolucion ? `<div class="cargo-res">${h(c.resolucion)}</div>` : ''}
+        </div>`;
+
+  const renderPub = p => `
+        <div class="pub-entry">
+          <div class="pub-autores">${h(p.autores)}</div>
+          <div class="pub-titulo">${h(p.titulo)}</div>
+          <div class="pub-evento">${h(p.evento)}${p.anio ? ', ' + h(p.anio) : ''}${p.isbn ? '. ISBN ' + h(p.isbn) : ''}${p.paginas ? '. Págs. ' + h(p.paginas) : ''}.</div>
+        </div>`;
+
+  const renderProy = p => `
+        <div class="proy-entry">
+          <div class="proy-periodo">${h(p.periodo)}</div>
+          <div class="proy-codigo">${h(p.codigo)}</div>
+          <div class="proy-titulo">${h(p.titulo)}</div>
+          <div class="proy-rol">${h(p.rol)}${p.director ? '. Director: ' + h(p.director) : ''}.</div>
+        </div>`;
+
+  const renderGest = g => `<li>${h(g.cargo)}${g.detalle ? ' — ' + h(g.detalle) : ''}${g.anio ? ' (' + h(g.anio) + ')' : ''}${g.resolucion ? '. ' + h(g.resolucion) : ''}.</li>`;
+
+  const renderCong = c => `
+        <div class="cong-entry">
+          <div class="cong-rol ${c.rol === 'Expositor' || c.rol === 'Autor' ? 'rol-expo' : ''}">${h(c.rol)}</div>
+          <div class="cong-evento">${h(c.evento)}</div>
+          <div class="cong-lugar">${h(c.lugar)}${c.ponencias ? ' · ' + h(c.ponencias) : ''}</div>
+          <div class="cong-anio">${h(c.anio)}</div>
+        </div>`;
+
+  function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. Luis Fernando Crespo — Curriculum Vitae</title>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--ink:#1a1a2e;--paper:#faf8f4;--accent:#8b4513;--gold:#b8860b;--border:#d9d0bc;--muted:#6b6050}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Crimson Pro',Georgia,serif;background:var(--paper);color:var(--ink);font-size:1.05rem;line-height:1.7}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    header{background:var(--ink);color:#f5f0e8;padding:3rem 4rem 2.5rem;border-bottom:3px solid var(--accent)}
+    header h1{font-size:2.6rem;font-weight:300;letter-spacing:.04em;margin-bottom:.4rem}
+    header .subtitle{font-size:1.15rem;color:rgba(245,240,232,.75);margin-bottom:1.5rem}
+    header .contact{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:rgba(245,240,232,.6);letter-spacing:.1em;display:flex;flex-wrap:wrap;gap:.5rem 2rem}
+    nav{background:#fff;border-bottom:1px solid var(--border);padding:.75rem 4rem;display:flex;gap:2rem;flex-wrap:wrap;position:sticky;top:0;z-index:10}
+    nav a{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+    nav a:hover{color:var(--accent);text-decoration:none}
+    main{max-width:900px;margin:0 auto;padding:3rem 2rem 5rem}
+    section{margin-bottom:3.5rem}
+    h2{font-size:1.5rem;font-weight:600;color:var(--ink);padding-bottom:.5rem;border-bottom:1.5px solid var(--border);margin-bottom:1.75rem;letter-spacing:.02em}
+    h3{font-size:1.1rem;font-weight:600;color:var(--accent);margin-bottom:.75rem;font-family:'JetBrains Mono',monospace;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase}
+    /* cargos */
+    .cargo-entry{display:grid;grid-template-columns:120px 1fr;gap:.3rem 1.5rem;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+    .cargo-entry:last-child{border-bottom:none}
+    .cargo-periodo{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--gold);letter-spacing:.05em;padding-top:.2rem}
+    .cargo-cargo{font-weight:600;grid-column:2}
+    .cargo-inst,.cargo-res{color:var(--muted);font-size:.95rem;grid-column:2}
+    /* pubs */
+    .pub-entry{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+    .pub-entry:last-child{border-bottom:none}
+    .pub-autores{font-size:.95rem;color:var(--muted)}
+    .pub-titulo{font-weight:600;margin:.2rem 0}
+    .pub-evento{font-size:.9rem;color:var(--muted);font-style:italic}
+    /* proyectos */
+    .proy-entry{display:grid;grid-template-columns:100px 1fr;gap:.2rem 1.25rem;margin-bottom:1.25rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border)}
+    .proy-entry:last-child{border-bottom:none}
+    .proy-periodo{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--gold);padding-top:.2rem}
+    .proy-codigo{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);grid-column:2}
+    .proy-titulo{font-weight:600;grid-column:2}
+    .proy-rol{font-size:.95rem;color:var(--muted);grid-column:2}
+    /* gestión */
+    ul.gestion-list{padding-left:1.25rem}
+    ul.gestion-list li{margin-bottom:.75rem;font-size:1rem}
+    /* congresos */
+    .cong-entry{display:grid;grid-template-columns:90px 1fr 70px;gap:.2rem 1rem;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);align-items:start}
+    .cong-entry:last-child{border-bottom:none}
+    .cong-rol{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:.3rem}
+    .rol-expo{color:var(--accent);font-weight:500}
+    .cong-evento{font-weight:600;font-size:.98rem}
+    .cong-lugar{color:var(--muted);font-size:.9rem;grid-column:2}
+    .cong-anio{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--gold);text-align:right}
+    footer{text-align:center;padding:2rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:.15em;border-top:1px solid var(--border)}
+    @media(max-width:640px){header{padding:2rem 1.5rem}nav{padding:.5rem 1.5rem}main{padding:2rem 1rem}.cargo-entry,.proy-entry{grid-template-columns:1fr}.cargo-periodo,.proy-periodo{grid-column:1}.cargo-cargo,.cargo-inst,.cargo-res,.proy-codigo,.proy-titulo,.proy-rol{grid-column:1}}
+  </style>
+</head>
+<body>
+<header>
+  <h1>Luis Fernando Crespo</h1>
+  <div class="subtitle">Profesor en Matemática · Docente Universitario · Investigador en Educación Matemática</div>
+  <div class="contact">
+    <span>Salta Capital, Argentina</span>
+    <span>luiscrespo111@gmail.com</span>
+    <span>(0388) 154962123</span>
+    <span>Nacido el 30 de octubre de 1986</span>
+  </div>
+</header>
+<nav>
+  <a href="#formacion">Formación</a>
+  <a href="#cargos">Cargos</a>
+  <a href="#publicaciones">Publicaciones</a>
+  <a href="#congresos">Congresos</a>
+  <a href="#proyectos">Proyectos</a>
+  <a href="#gestion">Gestión</a>
+</nav>
+<main>
+
+  <section id="formacion">
+    <h2>Formación Académica</h2>
+    <div class="cargo-entry">
+      <div class="cargo-periodo">Grado · 2013</div>
+      <div class="cargo-cargo">Profesor en Matemática</div>
+      <div class="cargo-inst">Título de Grado · Defensa de seminario: 18 de diciembre de 2013.</div>
+    </div>
+    <div class="cargo-entry">
+      <div class="cargo-periodo">Posgrado · En curso</div>
+      <div class="cargo-cargo">Maestría en Enseñanza de las Ciencias Exactas y Naturales</div>
+      <div class="cargo-inst">En proyecto de Tesis · Facultad de Ingeniería, Universidad Nacional del Comahue.</div>
+    </div>
+    <div class="cargo-entry">
+      <div class="cargo-periodo">Especialización</div>
+      <div class="cargo-cargo">Diploma Superior y Programa de Actualización en Docencia Superior</div>
+      <div class="cargo-inst">FEDUBA / CONADU – FCSO/UBA – CLACSO. 128 horas. Res. (CD) N° 3056/16.</div>
+    </div>
+  </section>
+
+  <section id="cargos">
+    <h2>Cargos Actuales</h2>
+    <h3>Universidad Nacional de Salta</h3>
+    ${cargosActuales.map(renderCargo).join('')}
+    ${cargosAnteriores.length ? `<h3 style="margin-top:2rem">Antecedentes en Docencia</h3>${cargosAnteriores.map(renderCargo).join('')}` : ''}
+  </section>
+
+  <section id="publicaciones">
+    <h2>Publicaciones Científicas</h2>
+    ${d.publicaciones.map(renderPub).join('')}
+  </section>
+
+  <section id="congresos">
+    <h2>Participación en Congresos y Eventos Científicos</h2>
+    ${d.congresos.map(renderCong).join('')}
+  </section>
+
+  <section id="proyectos">
+    <h2>Proyectos de Investigación</h2>
+    ${d.proyectos.map(renderProy).join('')}
+  </section>
+
+  <section id="gestion">
+    <h2>Gestión Institucional</h2>
+    <ul class="gestion-list">
+      ${d.gestion.map(renderGest).join('')}
+    </ul>
+  </section>
+
+</main>
+<footer>Curriculum Vitae Académico · Luis Fernando Crespo · Salta, Argentina · ${new Date().getFullYear()} · luiscrespo111@gmail.com</footer>
+</body>
+</html>`;
+}
+</script>
+</body>
+</html>`;
